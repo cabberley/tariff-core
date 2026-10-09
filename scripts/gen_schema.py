@@ -17,6 +17,14 @@ from tariff_core.models import MonthDay, PlanVersion, Window
 
 SCHEMA_PATH = Path(__file__).parents[1] / "src" / "tariff_core" / "jsonschema" / "plan.v1.json"
 FIELD_NAMES = {"from_": "from", "from_register": "from"}
+_DAY_NAME_PATTERN = (
+    r"(?:[Mm][Oo][Nn]|[Tt][Uu][Ee]|[Ww][Ee][Dd]|[Tt][Hh][Uu]|"
+    r"[Ff][Rr][Ii]|[Ss][Aa][Tt]|[Ss][Uu][Nn])"
+)
+_DAY_PATTERN = (
+    r"^(?:[Aa][Ll][Ll]|[Ww][Ee][Ee][Kk][Dd][Aa][Yy][Ss]|"
+    r"[Ww][Ee][Ee][Kk][Ee][Nn][Dd][Ss]|" + _DAY_NAME_PATTERN + r")$"
+)
 
 
 def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
@@ -141,24 +149,13 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
                 "anyOf": [
                     {
                         "type": "string",
-                        "enum": [
-                            "all",
-                            "weekdays",
-                            "weekends",
-                            "mon",
-                            "tue",
-                            "wed",
-                            "thu",
-                            "fri",
-                            "sat",
-                            "sun",
-                        ],
+                        "pattern": _DAY_PATTERN,
                     },
                     {
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+                            "pattern": f"^{_DAY_NAME_PATTERN}$",
                         },
                         "uniqueItems": True,
                     },

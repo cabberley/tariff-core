@@ -72,6 +72,16 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     }
     validator.validate(named_schedule)
     parse_plan(named_schedule)
+    case_insensitive_days = {
+        "commodity": "gas",
+        "schedules": {
+            "peak": {"days": "WEEKDAYS", "time": ["16:00", "24:00"]},
+            "other": [{"days": ["MON", "Tue"], "time": ["08:00", "09:00"]}],
+        },
+        "components": [{"kind": "usage", "schedule": "peak"}],
+    }
+    validator.validate(case_insensitive_days)
+    parse_plan(case_insensitive_days)
     unsupported_frequency = {"commodity": "gas", "billing": {"frequencies": ["P6M"]}}
     assert not validator.is_valid(unsupported_frequency)
     with pytest.raises(ValueError):

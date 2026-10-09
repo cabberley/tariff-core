@@ -1098,31 +1098,12 @@
         "days": {
           "anyOf": [
             {
-              "enum": [
-                "all",
-                "weekdays",
-                "weekends",
-                "mon",
-                "tue",
-                "wed",
-                "thu",
-                "fri",
-                "sat",
-                "sun"
-              ],
+              "pattern": "^(?:[Aa][Ll][Ll]|[Ww][Ee][Ee][Kk][Dd][Aa][Yy][Ss]|[Ww][Ee][Ee][Kk][Ee][Nn][Dd][Ss]|(?:[Mm][Oo][Nn]|[Tt][Uu][Ee]|[Ww][Ee][Dd]|[Tt][Hh][Uu]|[Ff][Rr][Ii]|[Ss][Aa][Tt]|[Ss][Uu][Nn]))$",
               "type": "string"
             },
             {
               "items": {
-                "enum": [
-                  "mon",
-                  "tue",
-                  "wed",
-                  "thu",
-                  "fri",
-                  "sat",
-                  "sun"
-                ],
+                "pattern": "^(?:[Mm][Oo][Nn]|[Tt][Uu][Ee]|[Ww][Ee][Dd]|[Tt][Hh][Uu]|[Ff][Rr][Ii]|[Ss][Aa][Tt]|[Ss][Uu][Nn])$",
                 "type": "string"
               },
               "type": "array",
