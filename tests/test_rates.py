@@ -1,63 +1,23 @@
 """Tests for time-varying and dynamic tariff rates."""
 
+import json
 from datetime import UTC, datetime
 from decimal import Decimal
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pytest
 
 from tariff_core import forecast, parse_plan, rate_at
+from tariff_core.adapters.cdr import from_cdr
 
+FIXTURES = Path(__file__).parent / "fixtures" / "plans" / "cdr"
 BRISBANE = ZoneInfo("Australia/Brisbane")
 
 
 def _origin_plan():
-    return parse_plan(
-        {
-            "commodity": "electricity",
-            "timezone": "Australia/Brisbane",
-            "schedules": {
-                "peak": [{"days": "all", "time": ["16:00", "21:00"]}],
-                "off_peak": [{"days": "all", "time": ["11:00", "16:00"]}],
-                "shoulder": [{"days": "all", "time": ["21:00", "11:00"]}],
-            },
-            "components": [
-                {
-                    "kind": "usage",
-                    "schedule": "peak",
-                    "period": "peak",
-                    "period_label": "Peak",
-                    "rate": "0.36955",
-                },
-                {
-                    "kind": "usage",
-                    "schedule": "off_peak",
-                    "period": "off_peak",
-                    "period_label": "Day",
-                    "rate": "0.16829",
-                },
-                {
-                    "kind": "usage",
-                    "schedule": "shoulder",
-                    "period": "shoulder",
-                    "period_label": "Night",
-                    "rate": "0.22767",
-                },
-                {
-                    "kind": "usage",
-                    "register": "controlled_load_1",
-                    "period": "single",
-                    "rate": "0.15148",
-                },
-                {
-                    "kind": "usage",
-                    "direction": "export",
-                    "period": "single",
-                    "rate": "0",
-                },
-            ],
-        }
-    )
+    raw = json.loads((FIXTURES / "ORI1161031MRE3@EME.json").read_text())
+    return from_cdr(raw, retrieved_at=datetime(2026, 10, 9, tzinfo=UTC))[0]
 
 
 @pytest.mark.parametrize(
