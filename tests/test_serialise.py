@@ -30,7 +30,7 @@ from tariff_core import (
 FIXTURES = Path(__file__).parent / "fixtures" / "plans"
 
 
-@pytest.mark.parametrize("fixture", sorted(FIXTURES.glob("*")))
+@pytest.mark.parametrize("fixture", sorted(path for path in FIXTURES.glob("*") if path.is_file()))
 def test_plan_fixtures_round_trip(fixture: Path) -> None:
     plan = parse_plan(fixture.read_text())
     assert parse_plan(dump_plan(plan)) == plan
