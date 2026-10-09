@@ -17,12 +17,12 @@ This example loads the Origin Ergon fixture, prints its current tariff rate, the
 ```python
 from datetime import datetime, time, timedelta
 from decimal import Decimal
-from pathlib import Path
+from importlib.resources import files
 from zoneinfo import ZoneInfo
 
 from tariff_core import BillingPeriod, Interval, bill, parse_plan, rate_at
 
-plan = parse_plan(Path("tests/fixtures/plans/origin_ergon.yaml").read_text())
+plan = parse_plan(files("tariff_core").joinpath("data", "origin_ergon.json").read_text())
 zone = ZoneInfo("Australia/Brisbane")
 now = datetime.now(zone)
 start = now.replace(hour=0, minute=0, second=0, microsecond=0)

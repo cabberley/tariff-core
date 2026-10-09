@@ -12,6 +12,265 @@
       },
       "type": "object"
     },
+    "BlockTier": {
+      "additionalProperties": false,
+      "properties": {
+        "rate": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "up_to": {
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "rate"
+      ],
+      "type": "object"
+    },
+    "Blocks": {
+      "additionalProperties": false,
+      "properties": {
+        "period": {
+          "enum": [
+            "day",
+            "billing_period",
+            "month",
+            "quarter",
+            "year"
+          ],
+          "type": "string"
+        },
+        "prorate": {
+          "type": "boolean"
+        },
+        "tiers": {
+          "items": {
+            "$ref": "#/$defs/BlockTier"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "period",
+        "prorate",
+        "tiers"
+      ],
+      "type": "object"
+    },
+    "DemandComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "interval_minutes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "demand"
+          ]
+        },
+        "measure": {
+          "enum": [
+            "kW",
+            "kVA"
+          ],
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "max_interval_avg",
+            "max_instant",
+            "top_n_avg",
+            "rolling_12m_max"
+          ],
+          "type": "string"
+        },
+        "rate": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "reset": {
+          "enum": [
+            "monthly",
+            "billing_period"
+          ],
+          "type": "string"
+        },
+        "schedule": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Window"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "season": {
+          "type": "string"
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "top_n": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "enum": [
+            "per_kw_per_month",
+            "per_kw_per_day",
+            "per_kva_per_month"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "measure",
+        "unit",
+        "rate",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "DerivedQuantity": {
+      "additionalProperties": false,
+      "properties": {
+        "factor": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "from": {
+          "enum": [
+            "general",
+            "controlled_load_1",
+            "controlled_load_2",
+            "recycled",
+            "sewerage"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "factor"
+      ],
+      "type": "object"
+    },
+    "DiscountComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "applies_to": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "conditional": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "discount"
+          ]
+        },
+        "percent": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "schedule": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Window"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "season": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "applies_to",
+        "percent",
+        "kind"
+      ],
+      "type": "object"
+    },
     "Effective": {
       "additionalProperties": false,
       "properties": {
@@ -40,6 +299,73 @@
       },
       "type": "object"
     },
+    "FixedComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "fixed"
+          ]
+        },
+        "label": {
+          "enum": [
+            "supply",
+            "metering",
+            "subscription",
+            "water_access",
+            "sewerage_access",
+            "other"
+          ],
+          "type": "string"
+        },
+        "rate": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "register": {
+          "anyOf": [
+            {
+              "enum": [
+                "general",
+                "controlled_load_1",
+                "controlled_load_2",
+                "recycled",
+                "sewerage"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "season": {
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "per_day",
+            "per_month",
+            "per_quarter",
+            "per_year"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "unit",
+        "rate",
+        "kind"
+      ],
+      "type": "object"
+    },
     "Holidays": {
       "additionalProperties": false,
       "properties": {
@@ -55,6 +381,33 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "IncentiveComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "kind": {
+          "enum": [
+            "incentive"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
       "type": "object"
     },
     "PlanVersion": {
@@ -75,7 +428,25 @@
           "type": "string"
         },
         "components": {
-          "items": {},
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/FixedComponent"
+              },
+              {
+                "$ref": "#/$defs/UsageComponent"
+              },
+              {
+                "$ref": "#/$defs/DemandComponent"
+              },
+              {
+                "$ref": "#/$defs/DiscountComponent"
+              },
+              {
+                "$ref": "#/$defs/IncentiveComponent"
+              }
+            ]
+          },
           "type": "array"
         },
         "confidence": {
@@ -168,7 +539,12 @@
           ]
         },
         "schedules": {
-          "additionalProperties": {},
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/$defs/Window"
+            },
+            "type": "array"
+          },
           "type": "object"
         },
         "seasons": {
@@ -227,6 +603,48 @@
       ],
       "type": "object"
     },
+    "RateSource": {
+      "additionalProperties": false,
+      "properties": {
+        "adder": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "entity": {
+          "type": "string"
+        },
+        "multiplier": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "unit_scale": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        }
+      },
+      "required": [
+        "entity"
+      ],
+      "type": "object"
+    },
     "Region": {
       "additionalProperties": false,
       "properties": {
@@ -249,11 +667,11 @@
       "additionalProperties": false,
       "properties": {
         "from": {
-          "pattern": "^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+          "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
           "type": "string"
         },
         "to": {
-          "pattern": "^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+          "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
           "type": "string"
         }
       },
@@ -346,6 +764,164 @@
       "required": [
         "inclusive",
         "rate"
+      ],
+      "type": "object"
+    },
+    "UsageComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Blocks"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "direction": {
+          "enum": [
+            "import",
+            "export"
+          ],
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "usage"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "period": {
+          "anyOf": [
+            {
+              "enum": [
+                "peak",
+                "shoulder",
+                "off_peak",
+                "solar_soak",
+                "critical_peak",
+                "single"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "period_label": {
+          "type": "string"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DerivedQuantity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantity_unit": {
+          "type": "string"
+        },
+        "rate": {
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "$ref": "#/$defs/RateSource"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "register": {
+          "enum": [
+            "general",
+            "controlled_load_1",
+            "controlled_load_2",
+            "recycled",
+            "sewerage"
+          ],
+          "type": "string"
+        },
+        "schedule": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Window"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "season": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "Window": {
+      "additionalProperties": false,
+      "properties": {
+        "days": {
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "time": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+              "type": "string"
+            },
+            {
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "days",
+        "time"
       ],
       "type": "object"
     }

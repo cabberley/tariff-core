@@ -13,7 +13,12 @@ from tariff_core import from_cdr, parse_plan, to_dict
 FIXTURES = Path(__file__).parent / "fixtures" / "plans"
 SCHEMA_PATH = Path(__file__).parents[1] / "src" / "tariff_core" / "jsonschema" / "plan.v1.json"
 FIXTURE_PATHS = sorted(
-    [*FIXTURES.glob("*.json"), *FIXTURES.glob("*.yaml"), *(FIXTURES / "cdr").glob("*.json")]
+    [
+        *FIXTURES.glob("*.json"),
+        *FIXTURES.glob("*.yaml"),
+        *(FIXTURES / "cdr").glob("*.json"),
+        Path(__file__).parents[1] / "src" / "tariff_core" / "data" / "origin_ergon.json",
+    ]
 )
 
 
@@ -29,3 +34,12 @@ def test_plan_fixture_validates_against_generated_schema(fixture: Path) -> None:
         plans = [parse_plan(fixture.read_text())]
     for plan in plans:
         Draft202012Validator(schema).validate(to_dict(plan))
+
+
+def test_component_and_month_day_shapes_are_constrained() -> None:
+    schema: dict[str, Any] = json.loads(SCHEMA_PATH.read_text())
+    validator = Draft202012Validator(schema)
+    assert not validator.is_valid({"commodity": "gas", "components": [{}]})
+    assert not validator.is_valid(
+        {"commodity": "gas", "seasons": {"winter": {"from": "02-31", "to": "03-01"}}}
+    )

@@ -11,7 +11,7 @@ from decimal import Decimal
 from enum import Enum
 from pathlib import Path
 from types import UnionType
-from typing import Any, Literal, Union, get_args, get_origin, get_type_hints
+from typing import Any, Literal, TypeAliasType, Union, get_args, get_origin, get_type_hints
 
 from tariff_core.models import MonthDay, PlanVersion
 
@@ -23,7 +23,15 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
     if annotation is Any:
         return {}
     if annotation is MonthDay:
-        return {"type": "string", "pattern": r"^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$"}
+        return {
+            "type": "string",
+            "pattern": (
+                r"^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|"
+                r"(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|02-(?:0[1-9]|1\d|2[0-9]))$"
+            ),
+        }
+    if isinstance(annotation, TypeAliasType):
+        return _schema_for(annotation.__value__, definitions)
     if is_dataclass(annotation):
         name = annotation.__name__
         if name not in definitions:
@@ -68,6 +76,15 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
     if origin in (list, tuple, set, frozenset):
         if not arguments:
             return {"type": "array"}
+        if origin is frozenset and arguments == (int,):
+            return {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+                },
+                "uniqueItems": True,
+            }
         if origin is tuple and len(arguments) > 1 and arguments[-1] is not Ellipsis:
             return {
                 "type": "array",
