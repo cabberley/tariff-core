@@ -1,0 +1,34 @@
+id: au:cdr:ORI1161031MRE3@EME@2026-10-01#3fa1c2d9
+plan_id: au:cdr:ORI1161031MRE3@EME
+kind: retail
+display_name: Origin Go Variable Ongoing - Ergon
+supplier: {id: origin, name: Origin Energy}
+commodity: electricity
+customer_type: residential
+region: {country: AU, network: ergon, zone: null}
+currency: AUD
+tax: {inclusive: true, rate: "0.10"}
+timezone: Australia/Brisbane
+time_basis: local
+holidays: {calendar: AU-QLD, treatment: none}
+effective: {from: 2026-10-01, to: null}
+pricing_model: bundled
+billing: {frequencies: [P1M, P3M]}
+schedules:
+  peak: [{days: all, time: ["16:00", "21:00"]}]
+  shoulder: [{days: all, time: ["07:00", "16:00"]}]
+  off_peak: [{days: all, time: ["21:00", "07:00"]}]
+  controlled_load: [{days: all, time: ["22:00", "07:00"]}]
+components:
+  - {kind: fixed, label: supply, unit: per_day, rate: "1.42482"}
+  - {kind: usage, direction: import, register: general, quantity_unit: kWh, schedule: peak, period: peak, period_label: Peak, rate: "0.36955"}
+  - {kind: usage, direction: import, register: general, quantity_unit: kWh, schedule: shoulder, period: shoulder, period_label: Shoulder, rate: "0.28950"}
+  - {kind: usage, direction: import, register: general, quantity_unit: kWh, schedule: off_peak, period: off_peak, period_label: Off peak, rate: "0.22900"}
+  - {kind: usage, direction: import, register: controlled_load_1, quantity_unit: kWh, schedule: controlled_load, period: single, rate: "0.19800"}
+  - {kind: usage, direction: import, register: controlled_load_2, quantity_unit: kWh, schedule: controlled_load, period: single, rate: "0.19800"}
+  - {kind: usage, direction: export, register: general, quantity_unit: kWh, period: single, period_label: Feed-in, rate: "0"}
+source: {type: official_feed, feed: au_cdr, retrieved_at: 2026-10-09T08:15:00+10:00, raw_sha256: example}
+confidence: high
+partial: false
+unmapped_features: []
+notes: []
