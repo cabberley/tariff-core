@@ -279,3 +279,30 @@ def test_forecast_splits_dynamic_rate_series_boundaries() -> None:
         (start, middle, Decimal("0.1")),
         (middle, end, Decimal("0.2")),
     ]
+
+
+def test_forecast_refreshes_after_rate_lookup_lookahead() -> None:
+    plan = parse_plan(
+        {
+            "commodity": "gas",
+            "timezone": "UTC",
+            "seasons": {
+                "winter": {"from": "01-01", "to": "01-10"},
+                "summer": {"from": "01-10", "to": "01-01"},
+            },
+            "components": [
+                {"kind": "usage", "season": "winter", "rate": "1"},
+                {"kind": "usage", "season": "summer", "rate": "2"},
+            ],
+        }
+    )
+    start = datetime(2026, 1, 1, tzinfo=UTC)
+    transition = datetime(2026, 1, 10, tzinfo=UTC)
+    end = datetime(2026, 1, 12, tzinfo=UTC)
+
+    slots = forecast(plan, start, end)
+
+    assert [(slot.start, slot.end, slot.rate) for slot in slots] == [
+        (start, transition, Decimal("1")),
+        (transition, end, Decimal("2")),
+    ]

@@ -251,7 +251,7 @@ def forecast(
         value, series_boundary = _series_value(series, cursor)
         resolved = _resolved_for(plan, value)
         info = rate_at(plan, cursor, register=register, direction=direction, resolved=resolved)
-        boundary = end_utc
+        boundary = min(end_utc, cursor + _LOOKAHEAD)
         if info.next_change is not None and info.next_change < boundary:
             boundary = info.next_change
         if series_boundary is not None and series_boundary < boundary:
