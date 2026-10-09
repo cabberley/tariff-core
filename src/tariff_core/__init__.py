@@ -45,6 +45,7 @@ from tariff_core.models import (
     Window,
 )
 from tariff_core.parse import parse_plan
+from tariff_core.serialise import content_hash, dump_plan, to_dict, version_id
 
 __all__ = [
     "Billing",
@@ -89,5 +90,9 @@ __all__ = [
     "TimeBasis",
     "UsageComponent",
     "Window",
+    "content_hash",
+    "dump_plan",
     "parse_plan",
+    "to_dict",
+    "version_id",
 ]
