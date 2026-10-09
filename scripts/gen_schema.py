@@ -13,7 +13,7 @@ from pathlib import Path
 from types import UnionType
 from typing import Any, Literal, TypeAliasType, Union, get_args, get_origin, get_type_hints
 
-from tariff_core.models import MonthDay, PlanVersion
+from tariff_core.models import MonthDay, PlanVersion, Window
 
 SCHEMA_PATH = Path(__file__).parents[1] / "src" / "tariff_core" / "jsonschema" / "plan.v1.json"
 FIELD_NAMES = {"from_": "from", "from_register": "from"}
@@ -31,6 +31,15 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
             ),
         }
     if isinstance(annotation, TypeAliasType):
+        if annotation.__name__ == "Schedule":
+            window = _schema_for(Window, definitions)
+            return {
+                "anyOf": [
+                    {"type": "string"},
+                    window,
+                    {"type": "array", "items": window},
+                ]
+            }
         return _schema_for(annotation.__value__, definitions)
     if is_dataclass(annotation):
         name = annotation.__name__
@@ -120,8 +129,57 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
         if model.__name__ == "Source" and item.name == "extra":
             continue
         name = FIELD_NAMES.get(item.name, item.name)
+        if model is PlanVersion and item.name == "schedules":
+            window = _schema_for(Window, definitions)
+            properties[name] = {
+                "type": "object",
+                "additionalProperties": {"anyOf": [window, {"type": "array", "items": window}]},
+            }
+            continue
+        if model is Window and item.name == "days":
+            properties[name] = {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "enum": [
+                            "all",
+                            "weekdays",
+                            "weekends",
+                            "mon",
+                            "tue",
+                            "wed",
+                            "thu",
+                            "fri",
+                            "sat",
+                            "sun",
+                        ],
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+                        },
+                        "uniqueItems": True,
+                    },
+                ]
+            }
+            continue
+        if model is Window and item.name == "time":
+            time_schema = _schema_for(time, definitions)
+            properties[name] = {
+                "type": "array",
+                "prefixItems": [time_schema, {"anyOf": [time_schema, {"const": "24:00"}]}],
+                "minItems": 2,
+                "maxItems": 2,
+            }
+            continue
         properties[name] = _schema_for(hints[item.name], definitions)
-        if item.default is MISSING and item.default_factory is MISSING:
+        if (
+            item.default is MISSING
+            and item.default_factory is MISSING
+            and not (model is Window and item.name == "days")
+        ):
             required.append(name)
         elif get_origin(hints[item.name]) is Literal:
             required.append(name)

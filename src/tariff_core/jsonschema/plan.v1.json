@@ -5,18 +5,11 @@
       "properties": {
         "frequencies": {
           "items": {
-            "anyOf": [
-              {
-                "enum": [
-                  "P1M",
-                  "P3M"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "string"
-              }
-            ]
+            "enum": [
+              "P1M",
+              "P3M"
+            ],
+            "type": "string"
           },
           "type": "array"
         }
@@ -143,10 +136,20 @@
         "schedule": {
           "anyOf": [
             {
-              "items": {
-                "$ref": "#/$defs/Window"
-              },
-              "type": "array"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/Window"
+                },
+                {
+                  "items": {
+                    "$ref": "#/$defs/Window"
+                  },
+                  "type": "array"
+                }
+              ]
             },
             {
               "type": "null"
@@ -275,10 +278,20 @@
         "schedule": {
           "anyOf": [
             {
-              "items": {
-                "$ref": "#/$defs/Window"
-              },
-              "type": "array"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/Window"
+                },
+                {
+                  "items": {
+                    "$ref": "#/$defs/Window"
+                  },
+                  "type": "array"
+                }
+              ]
             },
             {
               "type": "null"
@@ -659,10 +672,17 @@
         },
         "schedules": {
           "additionalProperties": {
-            "items": {
-              "$ref": "#/$defs/Window"
-            },
-            "type": "array"
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Window"
+              },
+              {
+                "items": {
+                  "$ref": "#/$defs/Window"
+                },
+                "type": "array"
+              }
+            ]
           },
           "type": "object"
         },
@@ -1033,10 +1053,20 @@
         "schedule": {
           "anyOf": [
             {
-              "items": {
-                "$ref": "#/$defs/Window"
-              },
-              "type": "array"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/Window"
+                },
+                {
+                  "items": {
+                    "$ref": "#/$defs/Window"
+                  },
+                  "type": "array"
+                }
+              ]
             },
             {
               "type": "null"
@@ -1066,20 +1096,39 @@
       "additionalProperties": false,
       "properties": {
         "days": {
-          "items": {
-            "enum": [
-              "mon",
-              "tue",
-              "wed",
-              "thu",
-              "fri",
-              "sat",
-              "sun"
-            ],
-            "type": "string"
-          },
-          "type": "array",
-          "uniqueItems": true
+          "anyOf": [
+            {
+              "enum": [
+                "all",
+                "weekdays",
+                "weekends",
+                "mon",
+                "tue",
+                "wed",
+                "thu",
+                "fri",
+                "sat",
+                "sun"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "mon",
+                  "tue",
+                  "wed",
+                  "thu",
+                  "fri",
+                  "sat",
+                  "sun"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            }
+          ]
         },
         "time": {
           "maxItems": 2,
@@ -1090,17 +1139,20 @@
               "type": "string"
             },
             {
-              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
-              "type": "string"
+              "anyOf": [
+                {
+                  "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+                  "type": "string"
+                },
+                {
+                  "const": "24:00"
+                }
+              ]
             }
           ],
           "type": "array"
         }
       },
-      "required": [
-        "days",
-        "time"
-      ],
       "type": "object"
     }
   },

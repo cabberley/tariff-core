@@ -63,6 +63,20 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     validator.validate(demand)
     parse_plan(demand)
 
+    named_schedule = {
+        "commodity": "gas",
+        "schedules": {
+            "peak": [{"days": "weekdays", "time": ["16:00", "24:00"]}],
+        },
+        "components": [{"kind": "usage", "schedule": "peak"}],
+    }
+    validator.validate(named_schedule)
+    parse_plan(named_schedule)
+    unsupported_frequency = {"commodity": "gas", "billing": {"frequencies": ["P6M"]}}
+    assert not validator.is_valid(unsupported_frequency)
+    with pytest.raises(ValueError):
+        parse_plan(unsupported_frequency)
+
     source_plan = parse_plan(
         {"commodity": "gas", "source": {"type": "community", "provider": "catalogue-x"}}
     )
