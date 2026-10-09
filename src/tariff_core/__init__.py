@@ -1,5 +1,6 @@
 """Public API re-exports for tariff-core."""
 
+from tariff_core.engine.rates import RateInfo, RateSlot, forecast, rate_at
 from tariff_core.errors import ParseError
 from tariff_core.models import (
     Billing,
@@ -79,6 +80,8 @@ __all__ = [
     "PlanVersion",
     "PricingModel",
     "RateSource",
+    "RateInfo",
+    "RateSlot",
     "Region",
     "Register",
     "Schedule",
@@ -92,7 +95,9 @@ __all__ = [
     "Window",
     "content_hash",
     "dump_plan",
+    "forecast",
     "parse_plan",
+    "rate_at",
     "to_dict",
     "version_id",
 ]

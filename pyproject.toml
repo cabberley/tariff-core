@@ -20,6 +20,7 @@ dependencies = []
 
 [project.optional-dependencies]
 yaml = ["PyYAML>=6.0.2"]
+holidays = ["holidays>=0.106"]
 dev = [
   "hatchling>=1.32.4",
   "hatch-vcs>=0.5.0",
