@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Literal
 from zoneinfo import ZoneInfo
 
@@ -16,6 +16,7 @@ from tariff_core.models import (
     Commodity,
     DemandComponent,
     DemandReset,
+    DemandUnit,
     Direction,
     DiscountComponent,
     FixedComponent,
@@ -24,6 +25,7 @@ from tariff_core.models import (
     PlanVersion,
     RateSource,
     Register,
+    Schedule,
     UsageComponent,
 )
 from tariff_core.schedule import holiday_dates, matches_schedule, season_at, to_local
@@ -150,10 +152,9 @@ def _nominal_fixed_rate(component: FixedComponent) -> Decimal:
 
 
 def _duration_seconds(duration: timedelta) -> Decimal:
-    return (
-        Decimal(duration.days * 86400 + duration.seconds)
-        + Decimal(duration.microseconds) / Decimal(1_000_000)
-    )
+    return Decimal(duration.days * 86400 + duration.seconds) + Decimal(
+        duration.microseconds
+    ) / Decimal(1_000_000)
 
 
 def _local_midnight(day: date, timezone: ZoneInfo) -> datetime:
@@ -177,6 +178,29 @@ def _local_day_fraction(start: datetime, end: datetime, timezone: ZoneInfo) -> D
     return amount
 
 
+def _seasonal_day_fraction(
+    start: datetime,
+    end: datetime,
+    timezone: ZoneInfo,
+    plan: PlanVersion,
+    season: str,
+) -> Decimal:
+    """Count local day fractions during one season for a seasonal fixed charge."""
+    cursor = start.astimezone(UTC)
+    stop = end.astimezone(UTC)
+    amount = Decimal(0)
+    while cursor < stop:
+        local = cursor.astimezone(timezone)
+        next_midnight = _local_midnight(local.date() + timedelta(days=1), timezone)
+        day_start = _local_midnight(local.date(), timezone).astimezone(UTC)
+        day_end = next_midnight.astimezone(UTC)
+        boundary = min(day_end, stop)
+        if season_at(plan, local) == season:
+            amount += _duration_seconds(boundary - cursor) / _duration_seconds(day_end - day_start)
+        cursor = boundary
+    return amount
+
+
 def _breakpoints(
     start: datetime,
     end: datetime,
@@ -190,7 +214,7 @@ def _breakpoints(
     plans = [plan]
     if contract is not None:
         plans.extend(segment.plan for segment in contract.segments)
-    schedules = []
+    schedules: list[Schedule] = []
     for candidate_plan in plans:
         schedules.extend(candidate_plan.schedules.values())
         schedules.extend(
@@ -198,11 +222,43 @@ def _breakpoints(
             for component in candidate_plan.components
             if (schedule := getattr(component, "schedule", None)) is not None
         )
+    block_periods = {
+        component.blocks.period.value
+        for candidate_plan in plans
+        for component in candidate_plan.components
+        if isinstance(component, UsageComponent) and component.blocks is not None
+    }
+    seasonal_plans = [
+        candidate_plan
+        for candidate_plan in plans
+        if candidate_plan.seasons
+        or any(
+            getattr(component, "season", None) is not None
+            for component in candidate_plan.components
+        )
+    ]
+    has_daily_blocks = "day" in block_periods
+    calendar_reset_dates: dict[str, Callable[[date], bool]] = {
+        "month": lambda day: day.day == 1,
+        "quarter": lambda day: day.day == 1 and day.month in {1, 4, 7, 10},
+        "year": lambda day: day.month == 1 and day.day == 1,
+    }
     current = start_local.date()
     last = end_local.date()
     while current <= last:
         midnight = _local_midnight(current, timezone).astimezone(UTC)
-        if start.astimezone(UTC) < midnight < end.astimezone(UTC):
+        seasonal_change = any(
+            season_at(candidate_plan, current - timedelta(days=1))
+            != season_at(candidate_plan, current)
+            for candidate_plan in seasonal_plans
+        )
+        reset_boundary = any(
+            period_name in block_periods and check_date(current)
+            for period_name, check_date in calendar_reset_dates.items()
+        )
+        if (has_daily_blocks or seasonal_change or reset_boundary) and start.astimezone(
+            UTC
+        ) < midnight < end.astimezone(UTC):
             boundaries.add(midnight)
         for schedule in schedules:
             for window in schedule:
@@ -239,9 +295,13 @@ def _label(
     tier_index: int | None = None,
 ) -> str:
     if component.label is not None:
-        base = component.label.replace("_", " ").title()
+        base = component.label.replace("_", " ").capitalize()
+    elif component.direction is Direction.EXPORT:
+        base = "Export"
     elif component.register in {Register.CONTROLLED_LOAD_1, Register.CONTROLLED_LOAD_2}:
         base = component.register.value.replace("_", " ").capitalize()
+    elif component.register is Register.SEWERAGE:
+        base = "Sewerage"
     elif component.period_label:
         base = component.period_label
     elif plan.commodity is Commodity.WATER:
@@ -252,7 +312,12 @@ def _label(
         base = component.period.value.replace("_", " ").title() if component.period else "Usage"
     if tier_index is not None and component.blocks is not None:
         return f"{base} tier {tier_index + 1}"
-    if component.period_label and component.label is None and component.register is Register.GENERAL:
+    if (
+        component.direction is Direction.IMPORT
+        and component.period_label
+        and component.label is None
+        and component.register is Register.GENERAL
+    ):
         return f"{base} {component.direction.value}"
     return base
 
@@ -288,7 +353,10 @@ def _discount_matches(discount: DiscountComponent, component: object) -> bool:
         }
         return bool(selectors.intersection(discount.applies_to))
     if isinstance(component, FixedComponent):
-        return "fixed" in discount.applies_to or f"fixed.{component.label.value}" in discount.applies_to
+        return (
+            "fixed" in discount.applies_to
+            or f"fixed.{component.label.value}" in discount.applies_to
+        )
     if isinstance(component, DemandComponent):
         return "demand" in discount.applies_to
     return False
@@ -305,9 +373,12 @@ def bill(
     """Price interval-ending usage, splitting where local tariff rules change."""
     resolver = resolved_rates if callable(resolved_rates) else None
     resolved_map = resolved_rates if isinstance(resolved_rates, Mapping) else None
-    normalized_intervals = tuple(intervals)
-    if any(not isinstance(interval, Interval) for interval in normalized_intervals):
+    interval_values = tuple(intervals)
+    if any(not isinstance(interval, Interval) for interval in interval_values):
         raise TypeError("intervals must contain Interval values")
+    normalized_intervals = tuple(
+        sorted(interval_values, key=lambda interval: interval.end.astimezone(UTC))
+    )
     contract = period.contract
     zone = ZoneInfo(plan.timezone or "UTC")
     period_days = _local_day_fraction(period.start, period.end, zone)
@@ -334,9 +405,9 @@ def bill(
             if rate is None:
                 missing_intervals.setdefault(component_index, set()).add(interval_number)
                 return
-            key = (component_index, None)
+            amount_key: tuple[int, int | None] = (component_index, None)
             amount = amounts.setdefault(
-                key,
+                amount_key,
                 _Amount(
                     component_index,
                     _label(component, selected_plan),
@@ -346,11 +417,17 @@ def bill(
                     component.quantity_unit,
                 ),
             )
-            amount.add(quantity, rate, credit=component.direction is Direction.EXPORT or rate < 0)
+            amount.add(
+                quantity,
+                rate,
+                credit=rate < 0 or (component.direction is Direction.EXPORT and rate == 0),
+            )
             return
 
         blocks = component.blocks
-        period_key = block_period_key(blocks.period.value, local.date(), period.start.astimezone(zone).date())
+        period_key = block_period_key(
+            blocks.period.value, local.date(), period.start.astimezone(zone).date()
+        )
         used_key = (component_index, period_key)
         used = block_used.get(used_key, Decimal(0))
         split = allocate_blocks(blocks, quantity, used=used, period_days=period_days)
@@ -371,7 +448,8 @@ def bill(
             amount.add(
                 tier.quantity,
                 tier.rate,
-                credit=component.direction is Direction.EXPORT or tier.rate < 0,
+                credit=tier.rate < 0
+                or (component.direction is Direction.EXPORT and tier.rate == 0),
             )
 
     for interval_number, interval in enumerate(normalized_intervals):
@@ -383,7 +461,7 @@ def bill(
         if contract is not None:
             try:
                 interval_plan = contract.active_segment(
-                    ((clip_start + (clip_end - clip_start) / 2).astimezone(interval.end.tzinfo))
+                    (clip_start + (clip_end - clip_start) / 2).astimezone(interval.end.tzinfo)
                 ).plan
             except ValueError:
                 interval_plan = plan
@@ -404,7 +482,9 @@ def bill(
             if contract is not None:
                 try:
                     slice_plan = contract.active_segment(
-                        ((slice_start + (slice_end - slice_start) / 2).astimezone(interval.end.tzinfo))
+                        (slice_start + (slice_end - slice_start) / 2).astimezone(
+                            interval.end.tzinfo
+                        )
                     ).plan
                 except ValueError:
                     pass
@@ -490,24 +570,28 @@ def bill(
                         interval_number,
                     )
 
-    for component_index, component in enumerate(plan.components):
-        if not isinstance(component, FixedComponent):
+    for component_index, fixed_component in enumerate(plan.components):
+        if not isinstance(fixed_component, FixedComponent):
             continue
         timezone = ZoneInfo(plan.timezone or "UTC")
-        current = period.start.astimezone(timezone)
-        stop = period.end.astimezone(timezone)
-        total_days = _local_day_fraction(period.start, period.end, timezone)
-        if total_days == 0 or not _season_applies(component, plan, current):
+        total_days = (
+            _local_day_fraction(period.start, period.end, timezone)
+            if fixed_component.season is None
+            else _seasonal_day_fraction(
+                period.start, period.end, timezone, plan, fixed_component.season
+            )
+        )
+        if total_days == 0:
             continue
-        rate = _nominal_fixed_rate(component)
+        rate = _nominal_fixed_rate(fixed_component)
         quantity = total_days
-        key = (component_index, None)
+        key: tuple[int, int | None] = (component_index, None)
         amount = amounts.setdefault(
             key,
             _Amount(
                 component_index,
-                component.label.value.replace("_", " ").capitalize(),
-                component.register,
+                fixed_component.label.value.replace("_", " ").capitalize(),
+                fixed_component.register,
                 None,
                 None,
                 "day",
@@ -524,41 +608,44 @@ def bill(
         if interval.end.astimezone(UTC) > period.start.astimezone(UTC)
         and (interval.end - interval.duration).astimezone(UTC) < period.end.astimezone(UTC)
     ]
-    for component_index, component in enumerate(plan.components):
-        if not isinstance(component, DemandComponent):
+    for component_index, demand_component in enumerate(plan.components):
+        if not isinstance(demand_component, DemandComponent):
             continue
         grouped: dict[tuple[int, ...], list[Interval]] = {}
         for interval in demand_intervals:
             local = to_local(plan, interval.end - interval.duration)
-            if component.reset is DemandReset.MONTHLY:
-                key = (local.year, local.month)
+            group_key: tuple[int, ...]
+            if demand_component.reset is DemandReset.MONTHLY:
+                group_key = (local.year, local.month)
             else:
-                key = (period.start.astimezone(zone).date().toordinal(),)
-            grouped.setdefault(key, []).append(interval)
-        for reset_key, group in grouped.items():
-            demand = demand_quantity(component, group, plan)
-            charge = demand_amount(component, demand)
-            key = (component_index, hash(reset_key))
+                group_key = (period.start.astimezone(zone).date().toordinal(),)
+            grouped.setdefault(group_key, []).append(interval)
+        for reset_index, (_reset_key, group) in enumerate(grouped.items()):
+            demand = demand_quantity(demand_component, group, plan)
+            charge = demand_amount(demand_component, demand)
+            if demand_component.unit is DemandUnit.PER_KW_PER_DAY:
+                charge *= period_days
+            amount_key: tuple[int, int | None] = (component_index, reset_index)
             line = amounts.setdefault(
-                key,
+                amount_key,
                 _Amount(
                     component_index,
                     "Demand",
                     None,
                     None,
                     None,
-                    component.measure.value,
-                    fixed_rate=component.rate,
+                    demand_component.measure.value,
+                    fixed_rate=demand_component.rate,
                 ),
             )
-            line.quantity += max(Decimal(0), demand - (component.threshold or Decimal(0)))
+            line.quantity += max(Decimal(0), demand - (demand_component.threshold or Decimal(0)))
             line.amount += charge
-            line.rate_quantity += line.quantity * component.rate
+            line.rate_quantity += line.quantity * demand_component.rate
 
-    for component_index, component in enumerate(plan.components):
-        if not isinstance(component, DiscountComponent):
+    for component_index, discount_component in enumerate(plan.components):
+        if not isinstance(discount_component, DiscountComponent):
             continue
-        if component.conditional is not None and not include_conditional:
+        if discount_component.conditional is not None and not include_conditional:
             continue
         discount_base = sum(
             (
@@ -566,12 +653,12 @@ def bill(
                 for (base_index, _), line in amounts.items()
                 if base_index != component_index
                 and base_index < len(plan.components)
-                and _discount_matches(component, plan.components[base_index])
+                and _discount_matches(discount_component, plan.components[base_index])
                 and not line.credit
             ),
             Decimal(0),
         )
-        discount_amount = discount_base * component.percent / Decimal(100)
+        discount_amount = discount_base * discount_component.percent / Decimal(100)
         if discount_amount:
             amounts[(component_index, None)] = _Amount(
                 component_index=component_index,
@@ -591,12 +678,25 @@ def bill(
         warnings.append(
             f"Dynamic rate missing for {len(count)} interval(s) on component {component_index}"
         )
+
+    def line_order(item: tuple[tuple[int, int | None], _Amount]) -> tuple[int, int, int]:
+        component_index = item[0][0]
+        component = plan.components[component_index]
+        order = (
+            0
+            if isinstance(component, FixedComponent)
+            else 2
+            if isinstance(component, DemandComponent)
+            else 3
+            if isinstance(component, DiscountComponent)
+            else 1
+        )
+        tier = -1 if item[0][1] is None else item[0][1]
+        return order, component_index, tier
+
     lines = tuple(
         line.line_item()
-        for _, line in sorted(
-            amounts.items(),
-            key=lambda item: (item[0][0], -1 if item[0][1] is None else item[0][1]),
-        )
+        for _, line in sorted(amounts.items(), key=line_order)
         if line.quantity != 0 or line.amount != 0
     )
     subtotal_cost = sum((line.amount for line in lines if line.type == "cost"), Decimal(0))

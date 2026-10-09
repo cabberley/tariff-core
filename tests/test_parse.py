@@ -178,7 +178,9 @@ def test_water_example_fixture_matches_models() -> None:
                     (BlockTier(Decimal("1.62"), Decimal("60")), BlockTier(Decimal("2.10"))),
                 ),
             ),
-            UsageComponent(quantity_unit="kL", rate=Decimal("3.29"), label="bulk_water"),
+            UsageComponent(
+                quantity_unit="kL", rate=Decimal("3.29"), label="bulk_water", stack=True
+            ),
             UsageComponent(
                 register=Register.SEWERAGE,
                 quantity_unit="kL",

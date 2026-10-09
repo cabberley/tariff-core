@@ -23,8 +23,12 @@ def allocate_blocks(
     period_days: Decimal = Decimal(1),
 ) -> tuple[TierQuantity, ...]:
     """Allocate quantity across tiers from the previously consumed threshold position."""
+    if not blocks.tiers:
+        raise ValueError("block pricing requires at least one tier")
     if quantity < 0 or used < 0:
         raise ValueError("block quantities cannot be negative")
+    if not quantity.is_finite() or not used.is_finite() or not period_days.is_finite():
+        raise ValueError("block quantities and period length must be finite")
     tiers: list[TierQuantity] = []
     position = used
     remaining = quantity
@@ -56,7 +60,9 @@ def allocate_blocks(
         last = blocks.tiers[-1]
         if tiers and tiers[-1].tier_index == len(blocks.tiers) - 1:
             previous = tiers[-1]
-            tiers[-1] = TierQuantity(previous.tier_index, previous.quantity + remaining, previous.rate)
+            tiers[-1] = TierQuantity(
+                previous.tier_index, previous.quantity + remaining, previous.rate
+            )
         else:
             tiers.append(TierQuantity(len(blocks.tiers) - 1, remaining, last.rate))
     return tuple(tiers)

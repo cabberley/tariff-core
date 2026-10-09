@@ -7,9 +7,12 @@ from decimal import Decimal
 
 from tariff_core.models import DemandComponent, DemandMethod
 from tariff_core.schedule import matches_schedule, season_at, to_local
+from tariff_core.units import convert
 
 
-def demand_quantity(component: DemandComponent, intervals: Iterable[object], plan: object) -> Decimal:
+def demand_quantity(
+    component: DemandComponent, intervals: Iterable[object], plan: object
+) -> Decimal:
     """Return the chargeable demand over matching interval measurements."""
     values: list[Decimal] = []
     for interval in intervals:
@@ -26,9 +29,11 @@ def demand_quantity(component: DemandComponent, intervals: Iterable[object], pla
             if value is None:
                 continue
         elif component.method is DemandMethod.MAX_INTERVAL_AVG:
-            value = quantity / _duration_hours(interval.duration)  # type: ignore[attr-defined]
+            energy = convert(quantity, interval.unit, "kWh")  # type: ignore[attr-defined]
+            value = energy / _duration_hours(interval.duration)  # type: ignore[attr-defined]
         else:
-            value = quantity / _duration_hours(interval.duration)  # type: ignore[attr-defined]
+            energy = convert(quantity, interval.unit, "kWh")  # type: ignore[attr-defined]
+            value = energy / _duration_hours(interval.duration)  # type: ignore[attr-defined]
         values.append(value)
     if not values:
         return Decimal(0)
@@ -40,7 +45,8 @@ def demand_quantity(component: DemandComponent, intervals: Iterable[object], pla
 
 def _duration_hours(duration: object) -> Decimal:
     seconds = duration.days * 86400 + duration.seconds  # type: ignore[attr-defined]
-    return Decimal(seconds) / Decimal(3600)
+    seconds_decimal = Decimal(seconds) + Decimal(duration.microseconds) / Decimal(1_000_000)  # type: ignore[attr-defined]
+    return seconds_decimal / Decimal(3600)
 
 
 def demand_amount(component: DemandComponent, demand: Decimal) -> Decimal:

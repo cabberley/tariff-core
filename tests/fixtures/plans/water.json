@@ -7,7 +7,7 @@
     {"kind": "usage", "direction": "import", "quantity_unit": "kL",
       "blocks": {"period": "quarter", "prorate": true,
         "tiers": [{"up_to": "60", "rate": "1.62"}, {"rate": "2.10"}]}},
-    {"kind": "usage", "direction": "import", "quantity_unit": "kL", "label": "bulk_water", "rate": "3.29"},
+    {"kind": "usage", "direction": "import", "quantity_unit": "kL", "label": "bulk_water", "rate": "3.29", "stack": true},
     {"kind": "usage", "register": "sewerage", "quantity": {"from": "general", "factor": "0.85"},
       "quantity_unit": "kL", "rate": "1.92"}
   ]
