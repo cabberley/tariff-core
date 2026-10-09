@@ -130,6 +130,31 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
 
 
 def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str, Any]:
+    if model.__name__ == "Season":
+        month_day = _schema_for(MonthDay, definitions)
+        return {
+            "anyOf": [
+                {
+                    "type": "object",
+                    "properties": {"from": month_day, "to": month_day},
+                    "required": ["from", "to"],
+                    "additionalProperties": False,
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "months": {
+                            "type": "array",
+                            "items": {"type": "integer", "minimum": 1, "maximum": 12},
+                            "minItems": 1,
+                            "uniqueItems": True,
+                        }
+                    },
+                    "required": ["months"],
+                    "additionalProperties": False,
+                },
+            ]
+        }
     hints = get_type_hints(model)
     properties: dict[str, Any] = {}
     required: list[str] = []
@@ -142,6 +167,11 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
             properties[name] = {
                 "type": "object",
                 "additionalProperties": {"anyOf": [window, {"type": "array", "items": window}]},
+            }
+            continue
+        if model is PlanVersion and item.name == "billing":
+            properties[name] = {
+                "anyOf": [_schema_for(hints[item.name], definitions), {"type": "null"}]
             }
             continue
         if model is Window and item.name == "days":

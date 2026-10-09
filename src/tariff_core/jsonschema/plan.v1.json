@@ -503,7 +503,14 @@
       "additionalProperties": false,
       "properties": {
         "billing": {
-          "$ref": "#/$defs/Billing"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Billing"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "bundle_id": {
           "anyOf": [
@@ -823,22 +830,45 @@
       "type": "object"
     },
     "Season": {
-      "additionalProperties": false,
-      "properties": {
-        "from": {
-          "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
-          "type": "string"
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "from": {
+              "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
+              "type": "string"
+            },
+            "to": {
+              "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "from",
+            "to"
+          ],
+          "type": "object"
         },
-        "to": {
-          "pattern": "^(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|02-(?:0[1-9]|1\\d|2[0-9]))$",
-          "type": "string"
+        {
+          "additionalProperties": false,
+          "properties": {
+            "months": {
+              "items": {
+                "maximum": 12,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "months"
+          ],
+          "type": "object"
         }
-      },
-      "required": [
-        "from",
-        "to"
-      ],
-      "type": "object"
+      ]
     },
     "Source": {
       "additionalProperties": true,

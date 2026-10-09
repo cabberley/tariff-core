@@ -41,6 +41,8 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     validator = Draft202012Validator(schema)
     assert not validator.is_valid({"commodity": "gas", "components": [{}]})
     assert validator.is_valid({"commodity": "gas", "bundle_id": None})
+    assert validator.is_valid({"commodity": "gas", "billing": None})
+    parse_plan({"commodity": "gas", "billing": None})
     assert validator.is_valid(
         {"commodity": "gas", "components": [{"kind": "incentive", "value": None}]}
     )
@@ -102,3 +104,6 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
         {"commodity": "gas", "source": {"type": "community", "provider": "catalogue-x"}}
     )
     validator.validate(to_dict(source_plan))
+    month_season = {"commodity": "gas", "seasons": {"summer": {"months": [11, 12, 1, 2, 3]}}}
+    validator.validate(month_season)
+    parse_plan(month_season)
