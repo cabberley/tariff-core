@@ -290,7 +290,7 @@ def _parse_blocks(value: Any, path: str) -> Blocks:
 def _component_schedule(
     obj: Mapping[str, Any], path: str, schedules: Mapping[str, Schedule]
 ) -> Schedule | None:
-    if "schedule" not in obj:
+    if obj.get("schedule") is None:
         return None
     return _parse_schedule(obj["schedule"], f"{path}.schedule", schedules)
 
@@ -307,11 +307,13 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
         return FixedComponent(
             label=_enum(obj["label"], FixedLabel, f"{path}.label"),
             register=_enum(obj["register"], Register, f"{path}.register")
-            if "register" in obj
+            if obj.get("register") is not None
             else None,
             unit=_enum(obj["unit"], FixedUnit, f"{path}.unit"),
             rate=_decimal(obj["rate"], f"{path}.rate"),
-            season=_string(obj["season"], f"{path}.season") if "season" in obj else None,
+            season=_string(obj["season"], f"{path}.season")
+            if obj.get("season") is not None
+            else None,
         )
     if kind == "usage":
         allowed = {
@@ -331,7 +333,7 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
         }
         obj = _object(value, path, allowed)
         quantity = None
-        if "quantity" in obj:
+        if obj.get("quantity") is not None:
             quantity_obj = _object(
                 obj["quantity"], f"{path}.quantity", {"from", "factor"}, {"from", "factor"}
             )
@@ -340,7 +342,7 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
                 factor=_decimal(quantity_obj["factor"], f"{path}.quantity.factor"),
             )
         rate: Decimal | RateSource | None = None
-        if "rate" in obj:
+        if obj.get("rate") is not None:
             raw_rate = obj["rate"]
             if isinstance(raw_rate, Mapping):
                 rate_obj = _object(
@@ -362,15 +364,21 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
             register=_enum(obj.get("register", "general"), Register, f"{path}.register"),
             quantity_unit=_string(obj.get("quantity_unit", "kWh"), f"{path}.quantity_unit"),
             schedule=_component_schedule(obj, path, schedules),
-            season=_string(obj["season"], f"{path}.season") if "season" in obj else None,
-            period=_enum(obj["period"], Period, f"{path}.period") if "period" in obj else None,
+            season=_string(obj["season"], f"{path}.season")
+            if obj.get("season") is not None
+            else None,
+            period=_enum(obj["period"], Period, f"{path}.period")
+            if obj.get("period") is not None
+            else None,
             period_label=_string(obj["period_label"], f"{path}.period_label")
-            if "period_label" in obj
+            if obj.get("period_label") is not None
             else None,
             rate=rate,
-            blocks=_parse_blocks(obj["blocks"], f"{path}.blocks") if "blocks" in obj else None,
+            blocks=_parse_blocks(obj["blocks"], f"{path}.blocks")
+            if obj.get("blocks") is not None
+            else None,
             quantity=quantity,
-            label=_string(obj["label"], f"{path}.label") if "label" in obj else None,
+            label=_string(obj["label"], f"{path}.label") if obj.get("label") is not None else None,
             stack=_boolean(obj.get("stack", False), f"{path}.stack"),
         )
     if kind == "demand":
@@ -394,15 +402,17 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
             unit=_enum(obj["unit"], DemandUnit, f"{path}.unit"),
             rate=_decimal(obj["rate"], f"{path}.rate"),
             schedule=_component_schedule(obj, path, schedules),
-            season=_string(obj["season"], f"{path}.season") if "season" in obj else None,
+            season=_string(obj["season"], f"{path}.season")
+            if obj.get("season") is not None
+            else None,
             interval_minutes=(
                 _integer(obj["interval_minutes"], f"{path}.interval_minutes")
-                if "interval_minutes" in obj
+                if obj.get("interval_minutes") is not None
                 else None
             ),
-            top_n=_integer(obj["top_n"], f"{path}.top_n") if "top_n" in obj else None,
+            top_n=_integer(obj["top_n"], f"{path}.top_n") if obj.get("top_n") is not None else None,
             threshold=_decimal(obj["threshold"], f"{path}.threshold")
-            if "threshold" in obj
+            if obj.get("threshold") is not None
             else None,
             reset=_enum(obj.get("reset", "monthly"), DemandReset, f"{path}.reset"),
         )
@@ -422,7 +432,9 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
                 else None
             ),
             schedule=_component_schedule(obj, path, schedules),
-            season=_string(obj["season"], f"{path}.season") if "season" in obj else None,
+            season=_string(obj["season"], f"{path}.season")
+            if obj.get("season") is not None
+            else None,
         )
     if kind == "incentive":
         obj = _object(value, path, {"kind", "label", "description", "value", "details"})
@@ -435,9 +447,11 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
         if not isinstance(details, Mapping):
             raise ParseError(f"{path}.details", "expected an object")
         return IncentiveComponent(
-            label=_string(obj["label"], f"{path}.label") if "label" in obj else None,
+            label=_string(obj["label"], f"{path}.label") if obj.get("label") is not None else None,
             description=(
-                _string(obj["description"], f"{path}.description") if "description" in obj else None
+                _string(obj["description"], f"{path}.description")
+                if obj.get("description") is not None
+                else None
             ),
             value=raw_value,
             details=dict(details),
@@ -453,17 +467,19 @@ def _parse_source(value: Any, path: str) -> Source:
         if not isinstance(key, str):
             raise ParseError(path, "object keys must be strings")
     return Source(
-        type=_enum(value["type"], SourceType, f"{path}.type") if "type" in value else None,
-        feed=_string(value["feed"], f"{path}.feed") if "feed" in value else None,
-        url=_string(value["url"], f"{path}.url") if "url" in value else None,
+        type=_enum(value["type"], SourceType, f"{path}.type")
+        if value.get("type") is not None
+        else None,
+        feed=_string(value["feed"], f"{path}.feed") if value.get("feed") is not None else None,
+        url=_string(value["url"], f"{path}.url") if value.get("url") is not None else None,
         retrieved_at=(
             _datetime(value["retrieved_at"], f"{path}.retrieved_at")
-            if "retrieved_at" in value
+            if value.get("retrieved_at") is not None
             else None
         ),
-        raw_sha256=(
-            _string(value["raw_sha256"], f"{path}.raw_sha256") if "raw_sha256" in value else None
-        ),
+        raw_sha256=_string(value["raw_sha256"], f"{path}.raw_sha256")
+        if value.get("raw_sha256") is not None
+        else None,
         extra={key: item for key, item in value.items() if key not in known},
     )
 

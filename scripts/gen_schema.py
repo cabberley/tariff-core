@@ -117,6 +117,8 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
     properties: dict[str, Any] = {}
     required: list[str] = []
     for item in fields(model):
+        if model.__name__ == "Source" and item.name == "extra":
+            continue
         name = FIELD_NAMES.get(item.name, item.name)
         properties[name] = _schema_for(hints[item.name], definitions)
         if item.default is MISSING and item.default_factory is MISSING:
@@ -126,7 +128,7 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
     result: dict[str, Any] = {
         "type": "object",
         "properties": properties,
-        "additionalProperties": False,
+        "additionalProperties": model.__name__ == "Source",
     }
     if required:
         result["required"] = required

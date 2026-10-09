@@ -822,12 +822,8 @@
       "type": "object"
     },
     "Source": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
-        "extra": {
-          "additionalProperties": {},
-          "type": "object"
-        },
         "feed": {
           "anyOf": [
             {

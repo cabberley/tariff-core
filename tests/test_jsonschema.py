@@ -47,3 +47,23 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     assert not validator.is_valid(
         {"commodity": "gas", "seasons": {"winter": {"from": "02-31", "to": "03-01"}}}
     )
+    demand = {
+        "commodity": "electricity",
+        "components": [
+            {
+                "kind": "demand",
+                "method": "max_interval_avg",
+                "measure": "kW",
+                "unit": "per_kw_per_month",
+                "rate": "12",
+                "top_n": None,
+            }
+        ],
+    }
+    validator.validate(demand)
+    parse_plan(demand)
+
+    source_plan = parse_plan(
+        {"commodity": "gas", "source": {"type": "community", "provider": "catalogue-x"}}
+    )
+    validator.validate(to_dict(source_plan))
