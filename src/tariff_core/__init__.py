@@ -1,5 +1,15 @@
 """Public API re-exports for tariff-core."""
 
+from tariff_core.contract import Contract, ContractSegment, Conversion
+from tariff_core.engine.bill import (
+    Bill,
+    BillingPeriod,
+    BillLineItem,
+    Interval,
+    LineItem,
+    RateResolver,
+    bill,
+)
 from tariff_core.engine.rates import RateInfo, RateSlot, forecast, rate_at
 from tariff_core.errors import ParseError
 from tariff_core.models import (
@@ -47,16 +57,23 @@ from tariff_core.models import (
 )
 from tariff_core.parse import parse_plan
 from tariff_core.serialise import content_hash, dump_plan, to_dict, version_id
+from tariff_core.units import convert, to_billed_quantity
 
 __all__ = [
     "Billing",
     "BillingFrequency",
+    "BillingPeriod",
+    "Bill",
+    "BillLineItem",
     "BlockPeriod",
     "BlockTier",
     "Blocks",
     "Commodity",
     "Component",
     "Confidence",
+    "Contract",
+    "ContractSegment",
+    "Conversion",
     "CustomerType",
     "DemandComponent",
     "DemandMeasure",
@@ -73,6 +90,8 @@ __all__ = [
     "HolidayTreatment",
     "Holidays",
     "IncentiveComponent",
+    "Interval",
+    "LineItem",
     "MonthDay",
     "ParseError",
     "Period",
@@ -80,6 +99,7 @@ __all__ = [
     "PlanVersion",
     "PricingModel",
     "RateSource",
+    "RateResolver",
     "RateInfo",
     "RateSlot",
     "Region",
@@ -94,10 +114,13 @@ __all__ = [
     "UsageComponent",
     "Window",
     "content_hash",
+    "convert",
+    "bill",
     "dump_plan",
     "forecast",
     "parse_plan",
     "rate_at",
     "to_dict",
+    "to_billed_quantity",
     "version_id",
 ]

@@ -252,6 +252,7 @@ class UsageComponent:
     blocks: Blocks | None = None
     quantity: DerivedQuantity | None = None
     label: str | None = None
+    stack: bool = False
     kind: Literal["usage"] = "usage"
 
 

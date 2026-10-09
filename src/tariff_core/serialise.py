@@ -110,6 +110,8 @@ def _component_dict(component: Any) -> dict[str, Any]:
             }
         if component.label is not None:
             result["label"] = component.label
+        if component.stack:
+            result["stack"] = True
         return result
 
     if isinstance(component, DemandComponent):
