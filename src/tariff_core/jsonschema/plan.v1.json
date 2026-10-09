@@ -5,7 +5,18 @@
       "properties": {
         "frequencies": {
           "items": {
-            "type": "string"
+            "anyOf": [
+              {
+                "enum": [
+                  "P1M",
+                  "P3M"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "type": "array"
         }
@@ -143,7 +154,14 @@
           ]
         },
         "season": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "threshold": {
           "anyOf": [
@@ -230,7 +248,14 @@
           "type": "array"
         },
         "conditional": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "kind": {
           "enum": [
@@ -261,7 +286,14 @@
           ]
         },
         "season": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -346,7 +378,14 @@
           ]
         },
         "season": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "unit": {
           "enum": [
@@ -370,7 +409,14 @@
       "additionalProperties": false,
       "properties": {
         "calendar": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "treatment": {
           "enum": [
@@ -387,7 +433,14 @@
       "additionalProperties": false,
       "properties": {
         "description": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "details": {
           "additionalProperties": {},
@@ -399,10 +452,34 @@
           ]
         },
         "label": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "value": {
-          "type": "string"
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -417,7 +494,14 @@
           "$ref": "#/$defs/Billing"
         },
         "bundle_id": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "commodity": {
           "enum": [
@@ -466,7 +550,14 @@
           ]
         },
         "currency": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "customer_type": {
           "enum": [
@@ -476,7 +567,14 @@
           "type": "string"
         },
         "display_name": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "effective": {
           "anyOf": [
@@ -499,7 +597,14 @@
           ]
         },
         "id": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "kind": {
           "enum": [
@@ -509,7 +614,14 @@
           "type": "string"
         },
         "network_tariff_ref": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "notes": {
           "items": {},
@@ -519,7 +631,14 @@
           "type": "boolean"
         },
         "plan_id": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "pricing_model": {
           "enum": [
@@ -591,7 +710,14 @@
           "type": "string"
         },
         "timezone": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "unmapped_features": {
           "items": {},
@@ -652,10 +778,24 @@
           "type": "string"
         },
         "network": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "zone": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -689,10 +829,24 @@
           "type": "object"
         },
         "feed": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "raw_sha256": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "retrieved_at": {
           "anyOf": [
@@ -723,7 +877,14 @@
           ]
         },
         "url": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "type": "object"
@@ -793,7 +954,14 @@
           ]
         },
         "label": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "period": {
           "anyOf": [
@@ -814,7 +982,14 @@
           ]
         },
         "period_label": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "quantity": {
           "anyOf": [
@@ -873,7 +1048,14 @@
           ]
         },
         "season": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "stack": {
           "type": "boolean"

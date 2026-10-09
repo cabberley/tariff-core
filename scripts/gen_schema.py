@@ -63,7 +63,15 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
         return {"enum": list(arguments)}
     if origin in (Union, UnionType):
         if str in arguments:
-            return {"type": "string"}
+            variants = [
+                _schema_for(item, definitions)
+                for item in arguments
+                if item is not str and item is not type(None)
+            ]
+            variants.append({"type": "string"})
+            if type(None) in arguments:
+                variants.append({"type": "null"})
+            return {"anyOf": variants}
         variants = [_schema_for(item, definitions) for item in arguments]
         if type(None) in arguments:
             variants = [

@@ -40,6 +40,10 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     schema: dict[str, Any] = json.loads(SCHEMA_PATH.read_text())
     validator = Draft202012Validator(schema)
     assert not validator.is_valid({"commodity": "gas", "components": [{}]})
+    assert validator.is_valid({"commodity": "gas", "bundle_id": None})
+    assert validator.is_valid(
+        {"commodity": "gas", "components": [{"kind": "incentive", "value": None}]}
+    )
     assert not validator.is_valid(
         {"commodity": "gas", "seasons": {"winter": {"from": "02-31", "to": "03-01"}}}
     )
