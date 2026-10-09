@@ -326,6 +326,7 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
             "blocks",
             "quantity",
             "label",
+            "stack",
         }
         obj = _object(value, path, allowed)
         quantity = None
@@ -369,6 +370,7 @@ def _parse_component(value: Any, path: str, schedules: Mapping[str, Schedule]) -
             blocks=_parse_blocks(obj["blocks"], f"{path}.blocks") if "blocks" in obj else None,
             quantity=quantity,
             label=_string(obj["label"], f"{path}.label") if "label" in obj else None,
+            stack=_boolean(obj.get("stack", False), f"{path}.stack"),
         )
     if kind == "demand":
         allowed = {

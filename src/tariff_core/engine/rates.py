@@ -62,6 +62,8 @@ def select_component(
     for index, component in enumerate(plan.components):
         if not isinstance(component, UsageComponent):
             continue
+        if component.stack:
+            continue
         if component.register != register or component.direction != direction:
             continue
         if component.season is not None and component.season != season:

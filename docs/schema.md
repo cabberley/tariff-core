@@ -159,6 +159,7 @@ Charges per unit of a metered or derived quantity. (Called `energy` in early dra
   period: peak            # normalised: peak | shoulder | off_peak | solar_soak | critical_peak | single
   period_label: Peak      # supplier's own wording, for display only
   rate: "0.36955"         # currency per quantity_unit
+  stack: true             # optional: price alongside the selected usage component
   blocks:                 # optional stepped pricing; replaces `rate`
     period: billing_period   # day | billing_period | month | quarter | year
     prorate: true
@@ -260,7 +261,12 @@ components:
     direction: import
     quantity_unit: kL
     blocks: {period: quarter, prorate: true, tiers: [{up_to: "60", rate: "1.62"}, {rate: "2.10"}]}
-  - {kind: usage, direction: import, quantity_unit: kL, label: bulk_water, rate: "3.29"}
+  - kind: usage
+   direction: import
+   quantity_unit: kL
+   label: bulk_water
+   rate: "3.29"
+   stack: true
   - {kind: usage, register: sewerage, quantity: {from: general, factor: "0.85"}, quantity_unit: kL, rate: "1.92"}
 ```
 
