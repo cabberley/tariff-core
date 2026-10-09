@@ -19,9 +19,11 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
+yaml = ["PyYAML>=6.0.2"]
 dev = [
   "hatchling>=1.32.4",
   "hatch-vcs>=0.5.0",
+  "PyYAML>=6.0.2",
   "ruff>=0.16.10",
   "mypy>=2.4.0",
   "pytest>=9.1.1",

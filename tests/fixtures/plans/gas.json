@@ -1,0 +1,16 @@
+{
+  "commodity": "gas",
+  "seasons": {
+    "peak": {"from": "06-01", "to": "10-01"},
+    "off_peak": {"from": "10-01", "to": "06-01"}
+  },
+  "components": [
+    {"kind": "fixed", "label": "supply", "unit": "per_day", "rate": "0.9100"},
+    {"kind": "usage", "direction": "import", "quantity_unit": "MJ", "season": "peak",
+      "blocks": {"period": "day", "prorate": false,
+        "tiers": [{"up_to": "100", "rate": "0.0420"}, {"rate": "0.0360"}]}},
+    {"kind": "usage", "direction": "import", "quantity_unit": "MJ", "season": "off_peak",
+      "blocks": {"period": "day", "prorate": false,
+        "tiers": [{"up_to": "100", "rate": "0.0390"}, {"rate": "0.0340"}]}}
+  ]
+}
