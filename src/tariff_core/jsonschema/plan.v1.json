@@ -1,0 +1,357 @@
+{
+  "$defs": {
+    "Billing": {
+      "additionalProperties": false,
+      "properties": {
+        "frequencies": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Effective": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Holidays": {
+      "additionalProperties": false,
+      "properties": {
+        "calendar": {
+          "type": "string"
+        },
+        "treatment": {
+          "enum": [
+            "none",
+            "as_weekend",
+            "own_schedule"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PlanVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "billing": {
+          "$ref": "#/$defs/Billing"
+        },
+        "bundle_id": {
+          "type": "string"
+        },
+        "commodity": {
+          "enum": [
+            "electricity",
+            "gas",
+            "water"
+          ],
+          "type": "string"
+        },
+        "components": {
+          "items": {},
+          "type": "array"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "enum": [
+                "high",
+                "medium",
+                "low",
+                "unverified"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "currency": {
+          "type": "string"
+        },
+        "customer_type": {
+          "enum": [
+            "residential",
+            "business"
+          ],
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "effective": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Effective"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "holidays": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Holidays"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "retail",
+            "network"
+          ],
+          "type": "string"
+        },
+        "network_tariff_ref": {
+          "type": "string"
+        },
+        "notes": {
+          "items": {},
+          "type": "array"
+        },
+        "partial": {
+          "type": "boolean"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "pricing_model": {
+          "enum": [
+            "pass_through",
+            "bundled"
+          ],
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Region"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schedules": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "seasons": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Season"
+          },
+          "type": "object"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supplier": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Supplier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tax": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Tax"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "time_basis": {
+          "enum": [
+            "local",
+            "market_standard"
+          ],
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "unmapped_features": {
+          "items": {},
+          "type": "array"
+        }
+      },
+      "required": [
+        "commodity"
+      ],
+      "type": "object"
+    },
+    "Region": {
+      "additionalProperties": false,
+      "properties": {
+        "country": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "country"
+      ],
+      "type": "object"
+    },
+    "Season": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "pattern": "^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+          "type": "string"
+        },
+        "to": {
+          "pattern": "^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "extra": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "feed": {
+          "type": "string"
+        },
+        "raw_sha256": {
+          "type": "string"
+        },
+        "retrieved_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "official_feed",
+                "community",
+                "formula",
+                "user",
+                "network_list"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Supplier": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "Tax": {
+      "additionalProperties": false,
+      "properties": {
+        "inclusive": {
+          "type": "boolean"
+        },
+        "rate": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        }
+      },
+      "required": [
+        "inclusive",
+        "rate"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/cabberley/tariff-core/plan.v1.json",
+  "$ref": "#/$defs/PlanVersion",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tariff Plan v1"
+}

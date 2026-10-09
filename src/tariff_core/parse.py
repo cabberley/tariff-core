@@ -10,6 +10,7 @@ from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 from typing import Any
 
+from tariff_core.contract import Contract, ContractSegment, Conversion
 from tariff_core.errors import ParseError
 from tariff_core.models import (
     Billing,
@@ -668,6 +669,122 @@ def parse_plan(data: Mapping[str, Any] | str) -> PlanVersion:
     else:
         raise ParseError("$", "expected a mapping or JSON/YAML string")
     return _parse_plan(value)
+
+
+def _contract_boundary(value: Any, path: str) -> date | datetime:
+    if isinstance(value, datetime):
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ParseError(path, "datetime must include a timezone")
+        return value
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        try:
+            parsed_date = date.fromisoformat(value)
+        except ValueError:
+            return _datetime(value, path)
+        if parsed_date.isoformat() == value:
+            return parsed_date
+    raise ParseError(path, "expected an ISO date or timezone-aware datetime")
+
+
+def parse_contract(data: Mapping[str, Any] | str) -> Contract:
+    """Parse a mapping, JSON document, or optional YAML document into a contract."""
+    if isinstance(data, str):
+        try:
+            value = json.loads(
+                data,
+                parse_float=Decimal,
+                parse_constant=lambda token: _invalid_json_constant(token),
+            )
+        except json.JSONDecodeError:
+            try:
+                import yaml
+            except ImportError as exc:
+                raise ParseError(
+                    "$", "input is not valid JSON; install tariff-core[yaml] to parse YAML"
+                ) from exc
+            try:
+                value = yaml.safe_load(data)
+            except yaml.YAMLError as exc:
+                raise ParseError("$", f"invalid YAML: {exc}") from exc
+        except ValueError as exc:
+            raise ParseError("$", str(exc)) from exc
+    elif isinstance(data, Mapping):
+        value = data
+    else:
+        raise ParseError("$", "expected a mapping or JSON/YAML string")
+
+    obj = _object(value, "$", {"commodity", "meters", "conversions", "segments"}, {"commodity"})
+    commodity = _enum(obj["commodity"], Commodity, "$.commodity")
+
+    raw_meters = obj.get("meters", {})
+    if not isinstance(raw_meters, Mapping):
+        raise ParseError("$.meters", "expected an object")
+    meters: dict[str, str] = {}
+    for register, unit in raw_meters.items():
+        if not isinstance(register, str):
+            raise ParseError("$.meters", "register names must be strings")
+        meters[register] = _string(unit, f"$.meters.{register}")
+
+    conversions: list[Conversion] = []
+    for index, raw in enumerate(_sequence(obj.get("conversions", ()), "$.conversions")):
+        path = f"$.conversions[{index}]"
+        conversion = _object(
+            raw,
+            path,
+            {
+                "from",
+                "register",
+                "meter_unit",
+                "billed_unit",
+                "heating_value",
+                "correction_factor",
+            },
+            {"from", "register", "meter_unit", "billed_unit", "heating_value", "correction_factor"},
+        )
+        conversions.append(
+            Conversion(
+                from_=_date(conversion["from"], f"{path}.from"),
+                register=_enum(conversion["register"], Register, f"{path}.register"),
+                meter_unit=_string(conversion["meter_unit"], f"{path}.meter_unit"),
+                billed_unit=_string(conversion["billed_unit"], f"{path}.billed_unit"),
+                heating_value=_decimal(conversion["heating_value"], f"{path}.heating_value"),
+                correction_factor=_decimal(
+                    conversion["correction_factor"], f"{path}.correction_factor"
+                ),
+            )
+        )
+
+    segments: list[ContractSegment] = []
+    for index, raw in enumerate(_sequence(obj.get("segments", ()), "$.segments")):
+        path = f"$.segments[{index}]"
+        segment = _object(
+            raw,
+            path,
+            {"from", "to", "plan", "overrides", "catalogue_ref"},
+            {"from", "plan"},
+        )
+        plan = segment["plan"]
+        if not isinstance(plan, Mapping):
+            raise ParseError(f"{path}.plan", "expected an object")
+        overrides = _sequence(segment.get("overrides", ()), f"{path}.overrides")
+        if any(not isinstance(override, Mapping) for override in overrides):
+            raise ParseError(f"{path}.overrides", "expected a list of objects")
+        segments.append(
+            ContractSegment(
+                from_=_contract_boundary(segment["from"], f"{path}.from"),
+                to=_contract_boundary(segment["to"], f"{path}.to")
+                if segment.get("to") is not None
+                else None,
+                plan=_parse_plan(plan),
+                overrides=tuple(overrides),
+                catalogue_ref=_string(segment["catalogue_ref"], f"{path}.catalogue_ref")
+                if segment.get("catalogue_ref") is not None
+                else None,
+            )
+        )
+    return Contract(commodity, meters, tuple(conversions), tuple(segments))
 
 
 def _invalid_json_constant(token: str) -> None:
