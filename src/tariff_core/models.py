@@ -174,7 +174,7 @@ class Effective:
 
 @dataclass(frozen=True, slots=True)
 class Billing:
-    frequencies: tuple[BillingFrequency | str, ...] = ()
+    frequencies: tuple[BillingFrequency, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

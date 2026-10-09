@@ -31,6 +31,8 @@ jobs:
         run: python -m ruff format --check .
       - name: Type-check
         run: python -m mypy --strict src/
+      - name: Check generated JSON Schema
+        run: python scripts/gen_schema.py --check
       - name: Test
         run: python -m pytest --cov=tariff_core --cov-report=term-missing
       - name: Build wheel and source distribution

@@ -1,5 +1,6 @@
 """Public API re-exports for tariff-core."""
 
+from tariff_core.adapters.cdr import from_cdr
 from tariff_core.contract import Contract, ContractSegment, Conversion
 from tariff_core.engine.bill import (
     Bill,
@@ -55,9 +56,10 @@ from tariff_core.models import (
     UsageComponent,
     Window,
 )
-from tariff_core.parse import parse_plan
+from tariff_core.parse import parse_contract, parse_plan
 from tariff_core.serialise import content_hash, dump_plan, to_dict, version_id
 from tariff_core.units import convert, to_billed_quantity
+from tariff_core.validate import ValidationIssue, validate_contract, validate_plan
 
 __all__ = [
     "Billing",
@@ -112,15 +114,20 @@ __all__ = [
     "Tax",
     "TimeBasis",
     "UsageComponent",
+    "ValidationIssue",
     "Window",
     "content_hash",
     "convert",
     "bill",
     "dump_plan",
     "forecast",
+    "from_cdr",
+    "parse_contract",
     "parse_plan",
     "rate_at",
     "to_dict",
     "to_billed_quantity",
+    "validate_contract",
+    "validate_plan",
     "version_id",
 ]

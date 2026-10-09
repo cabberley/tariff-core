@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install build backend
+        run: python -m pip install "hatchling>=1.32.4" "hatch-vcs>=0.5.0"
+      - name: Build distributions
+        run: python -m hatchling build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
