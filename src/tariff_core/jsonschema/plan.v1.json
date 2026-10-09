@@ -853,14 +853,2275 @@
           "additionalProperties": false,
           "properties": {
             "months": {
-              "items": {
-                "maximum": 12,
-                "minimum": 1,
-                "type": "integer"
-              },
-              "minItems": 1,
-              "type": "array",
-              "uniqueItems": true
+              "oneOf": [
+                {
+                  "items": {
+                    "enum": [
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 4,
+                  "minItems": 4,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 7,
+                  "minItems": 7,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 8,
+                  "minItems": 8,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 9,
+                  "minItems": 9,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 10,
+                  "minItems": 10,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      9,
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      10,
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      11,
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      12,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 11,
+                  "minItems": 11,
+                  "type": "array",
+                  "uniqueItems": true
+                },
+                {
+                  "items": {
+                    "enum": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12
+                    ],
+                    "type": "integer"
+                  },
+                  "maxItems": 12,
+                  "minItems": 12,
+                  "type": "array",
+                  "uniqueItems": true
+                }
+              ]
             }
           },
           "required": [

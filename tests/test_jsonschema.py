@@ -107,3 +107,7 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     month_season = {"commodity": "gas", "seasons": {"summer": {"months": [11, 12, 1, 2, 3]}}}
     validator.validate(month_season)
     parse_plan(month_season)
+    discontiguous_months = {"commodity": "gas", "seasons": {"invalid": {"months": [1, 2, 4]}}}
+    assert not validator.is_valid(discontiguous_months)
+    with pytest.raises(ValueError, match="months must be contiguous"):
+        parse_plan(discontiguous_months)

@@ -132,6 +132,12 @@ def _schema_for(annotation: Any, definitions: dict[str, Any]) -> dict[str, Any]:
 def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str, Any]:
     if model.__name__ == "Season":
         month_day = _schema_for(MonthDay, definitions)
+        contiguous_month_sets = [
+            [((start - 1 + offset) % 12) + 1 for offset in range(length)]
+            for length in range(1, 12)
+            for start in range(1, 13)
+        ]
+        contiguous_month_sets.append(list(range(1, 13)))
         return {
             "anyOf": [
                 {
@@ -144,10 +150,16 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
                     "type": "object",
                     "properties": {
                         "months": {
-                            "type": "array",
-                            "items": {"type": "integer", "minimum": 1, "maximum": 12},
-                            "minItems": 1,
-                            "uniqueItems": True,
+                            "oneOf": [
+                                {
+                                    "type": "array",
+                                    "items": {"type": "integer", "enum": months},
+                                    "minItems": len(months),
+                                    "maxItems": len(months),
+                                    "uniqueItems": True,
+                                }
+                                for months in contiguous_month_sets
+                            ]
                         }
                     },
                     "required": ["months"],
