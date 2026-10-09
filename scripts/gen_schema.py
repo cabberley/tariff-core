@@ -172,11 +172,10 @@ def _dataclass_schema(model: type[Any], definitions: dict[str, Any]) -> dict[str
             }
             continue
         properties[name] = _schema_for(hints[item.name], definitions)
-        if (
-            item.default is MISSING
-            and item.default_factory is MISSING
-            and not (model is Window and item.name == "days")
-        ):
+        parser_default = (model is Window and item.name == "days") or (
+            model.__name__ == "Blocks" and item.name == "prorate"
+        )
+        if item.default is MISSING and item.default_factory is MISSING and not parser_default:
             required.append(name)
         elif get_origin(hints[item.name]) is Literal:
             required.append(name)

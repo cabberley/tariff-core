@@ -277,7 +277,11 @@ def _parse_blocks(value: Any, path: str) -> Blocks:
         tiers.append(
             BlockTier(
                 rate=_decimal(tier["rate"], f"{tier_path}.rate"),
-                up_to=(_decimal(tier["up_to"], f"{tier_path}.up_to") if "up_to" in tier else None),
+                up_to=(
+                    _decimal(tier["up_to"], f"{tier_path}.up_to")
+                    if tier.get("up_to") is not None
+                    else None
+                ),
             )
         )
     return Blocks(

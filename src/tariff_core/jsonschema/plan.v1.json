@@ -77,7 +77,6 @@
       },
       "required": [
         "period",
-        "prorate",
         "tiers"
       ],
       "type": "object"

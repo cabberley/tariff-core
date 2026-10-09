@@ -62,6 +62,17 @@ def test_component_and_month_day_shapes_are_constrained() -> None:
     }
     validator.validate(demand)
     parse_plan(demand)
+    unlimited_block = {
+        "commodity": "gas",
+        "components": [
+            {
+                "kind": "usage",
+                "blocks": {"period": "day", "tiers": [{"rate": "1", "up_to": None}]},
+            }
+        ],
+    }
+    validator.validate(unlimited_block)
+    parse_plan(unlimited_block)
 
     named_schedule = {
         "commodity": "gas",
